@@ -13,8 +13,9 @@ class Director {
     addScene(name, scene) {
 
         //Does it exist?
-        if (this.scene[name])
+        if (this.scene[name] != undefined) {
             throw "That scene already exists!";
+        }
 
         //Otherwise add it
         this.scene[name] = scene;
@@ -29,6 +30,21 @@ class Director {
 
     //Swap scenes on stage
     showScene (nextSceneName, params) {
+
+        // Grab current scene
+        let oldScene = this.currentScene;
+
+        // Remove the current scene from the stage
+        this.stage.removeChild(this.scene[oldScene]);
+
+        // new scene to show
+        let newScene = this.scene[nextSceneName];
+
+        // Add new scene
+        this.stage.addChild(newScene);
+
+        // Update the current scene reference
+        this.currentScene = nextSceneName;
 
         if (params == undefined)
             params = { 

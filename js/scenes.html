@@ -1,0 +1,104 @@
+<html lang="en">
+<body>
+
+    <script type="module">
+
+        // All our Pixi code goes here
+
+        // Import Pixi.js modules here if needed
+        import { Director } from './director.js';
+
+        // Import animation
+        import { Animate } from './animate.js';
+
+        //Import buttons
+        import { Button } from './button.js';
+
+        import {
+            Application,
+            Assets,
+            Graphics,
+            Container,
+            Sprite,
+            Text,
+            TextStyle
+        } from './pixi.js';
+
+        // Create new app
+        const app = new Application();
+        await app.init({
+            background: 0xF8DDE5,
+            width: 900,
+            height: 560,
+            antialias: true
+        });
+        app.ticker.maxFPS = 60;
+        document.body.appendChild(app.canvas);
+
+        // Initialize the Director
+        let director = new Director(app.stage);
+
+        // Basic scene
+        let scene1 = new Graphics();
+
+        // Add it to the Director
+        try {
+            director.addScene("firstScene", scene1);
+            director.addScene("scene2", new Graphics());
+            console.log(director);
+        } catch (e) {
+            console.error(e);
+        }
+
+        // Add a fish to scene 1
+        // Load the fish texture
+
+        const fishTexture = await Assets.load('../img/fish.png');
+
+        // Create a sprite for the fish
+        const fishSprite1 = new Sprite(fishTexture);
+              fishSprite1.scale.set(0.5);
+
+        // Add the fish to scene 1
+        scene1.addChild(fishSprite1);
+
+        //Create button
+        let button1 = new Button("Go to Scene 2", () => {
+            director.showScene("scene2");
+        });
+        scene1.addChild(button1);
+
+        // Scene 2
+        let scene2 = new Container();
+
+        // Add a fish to scene1
+        // Create a fish for scene2
+
+        const fishSprite2 = new Sprite(fishTexture);
+        fishSprite2.x = 300;
+        fishSprite2.y = 100;
+        fishSprite2.scale.set(0.5);
+
+        scene2.addChild(fishSprite2);
+
+        //Add button
+        let button2 = new Button("Previous Fish", 200, 50); 
+            button2.y = 300; 
+            button2.on('pointerdown', () => {
+                director.showScene("firstScene");
+            });
+        scene2.addChild(button2);
+        
+        try {
+            director.addScene("scene2", scene2);
+        } catch (e) {
+            console.error(e);
+        }
+        
+        // Start the first scene
+        director.showScene("firstScene");
+
+    </script>
+
+</body>
+</html>
